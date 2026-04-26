@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KRL — KIET Robotics Lab</title>
+  <link rel="stylesheet" href="style.css?v=3">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+</head>
+
+<body>
+
+  <div id="krl-transition-overlay">
+    <div id="krl-overlay-circle"></div>
+  </div>
+
+  <div class="page-loader" id="pageLoader">
+    <div class="loader-text">KRL</div>
+  </div>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="navbar-dot"></span>
+      Robotics Lab
+    </a>
+    <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="navbar-right" id="navMenu">
+
+      <div class="nav-section-indicator" id="navSectionIndicator">
+        <span class="nav-section-dot"></span>
+        <span id="navSectionLabel">KRL</span>
+      </div>
+      <a href="members.html" class="navbar-link">Members</a>
+      <a href="join.html" class="btn-join">Connect</a>
+    </div>
+  </nav>
+
+  <section class="section-inner" id="heroInner">
+    <div class="hero-bg-text" id="heroBgText">ROBOTICS</div>
+    <div class="hero-spline-container" id="heroSpline">
+      <spline-viewer url="https://prod.spline.design/9cSCLEkp2taGwiE0/scene.splinecode"></spline-viewer>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+    <div id="butterfly-cursor">
+      <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" id="butterfly-svg">
+
+        <path id="wing-left" d="M30,20 C20,5 2,2 2,14 C2,24 18,28 30,20Z" fill="#c9a84c" fill-opacity="0.85" />
+
+        <path id="wing-right" d="M30,20 C40,5 58,2 58,14 C58,24 42,28 30,20Z" fill="#c9a84c" fill-opacity="0.85" />
+
+        <path id="wing-lower-left" d="M30,20 C16,22 4,34 10,38 C18,42 28,32 30,20Z" fill="#b8942e" fill-opacity="0.7" />
+
+        <path id="wing-lower-right" d="M30,20 C44,22 56,34 50,38 C42,42 32,32 30,20Z" fill="#b8942e"
+          fill-opacity="0.7" />
+
+        <ellipse cx="30" cy="22" rx="2" ry="10" fill="#3a2a0a" />
+
+        <circle cx="30" cy="11" r="2.5" fill="#3a2a0a" />
+
+        <line x1="30" y1="10" x2="22" y2="3" stroke="#3a2a0a" stroke-width="1" />
+        <line x1="30" y1="10" x2="38" y2="3" stroke="#3a2a0a" stroke-width="1" />
+        <circle cx="22" cy="3" r="1.2" fill="#c9a84c" />
+        <circle cx="38" cy="3" r="1.2" fill="#c9a84c" />
+      </svg>
+
+      <div id="butterfly-trail"></div>
+    </div>
+  </section>
+
+  <section class="section-inner" id="visionInner">
+    <div class="vision-header">
+      <div class="vision-label">WHAT'S NEXT</div>
+      <h2>Our Vision</h2>
+      <div class="underline-bar"></div>
+    </div>
+    <div class="vision-cards">
+      <div class="vision-card" data-tilt>
+        <h3>College Automation</h3>
+        <p>Deploying AI systems to automate college operations, from attendance to resource management.</p>
+      </div>
+      <div class="vision-card" data-tilt>
+        <h3>Robot Autonomy</h3>
+        <p>Building robots that navigate, decide, and act independently in real-world unstructured environments.</p>
+      </div>
+      <div class="vision-card" data-tilt>
+        <h3>AI-Driven Lab</h3>
+        <p>Making the lab fully operational on AI — from research pipelines to hardware testing loops.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-inner" id="aboutInner">
+
+    <div class="about-hr"></div>
+    <div class="about-grid">
+      <div class="about-video-wrap" id="aboutVideo">
+        <video autoplay muted loop playsinline>
+          <source src="assets/roverbuild.mp4" type="video/mp4">
+        </video>
+      </div>
+      <div class="about-text" id="aboutText">
+        <div class="label">KIET ROBOTICS LAB</div>
+        <h2>Built from Scratch.</h2>
+        <p class="body-text" id="aboutBody">KIET Robotics Lab (KRL) was established in 2022 with a single mission — to
+          build real robots with real impact. Starting from scratch with no proper equipment, our team hand-built a
+          rover capable of carrying 50 kg. We are now working toward bringing a humanoid robot and a robot dog into the
+          lab for advanced research projects. Lead by <a href="y-sai.html" class="lead-mention">Y. Sai</a> and <a href="krishna.html" class="lead-mention">Krishna</a>, KRL is where engineering meets ambition.</p>
+        <div class="about-stats">
+          <div class="stat-block">
+            <div class="stat-number">Est. 2022</div>
+            <div class="stat-label">Founded</div>
+          </div>
+          <div class="stat-block">
+            <div class="stat-number">50kg</div>
+            <div class="stat-label">Rover Capacity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-inner" id="projectsInner">
+
+    <div class="projects-waves">
+      <svg class="wave-1" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#e0d5c5" fill-opacity="0.5"
+          d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,224C672,213,768,171,864,154.7C960,139,1056,149,1152,170.7C1248,192,1344,224,1392,240L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
+        </path>
+      </svg>
+      <svg class="wave-2" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#c9b8a0" fill-opacity="0.35"
+          d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,128C672,107,768,117,864,144C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
+        </path>
+      </svg>
+      <svg class="wave-3" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#b8a090" fill-opacity="0.25"
+          d="M0,224L48,208C96,192,192,160,288,165.3C384,171,480,213,576,218.7C672,224,768,192,864,176C960,160,1056,160,1152,176C1248,192,1344,224,1392,240L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
+        </path>
+      </svg>
+    </div>
+
+    <div class="projects-top-label">HEY — THESE ARE THE PROJECTS DEVELOPED BY OUR TEAM</div>
+
+    <div class="projects-scatter" id="projectsScatter">
+      <div class="project-pill" onclick="location.href='projects.html#project-01'">How does SLAM work in real-time?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-03'">Can robots learn by themselves?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-06'">Can robots understand human speech?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-11'">Is VR controlling the robots?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-02'">Can robots navigate without GPS?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-04'">How do robots see the world in 3D?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-05'">How does 2D become 3D navigation?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-07'">Can AI run fully offline in your language?</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-14'">Autonomous Mapping using ROS 2</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-15'">Vision-Only 3D Mapping with RTAB-Map | ROS 2</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-16'">Road Segmentation with Depth Cameras</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-17'">Voice-Controlled Robot Dog using ROS 2</div>
+    </div>
+
+    <div class="projects-cursive">go with the flow</div>
+  </section>
+
+  <section class="section-inner" id="membersInner">
+
+    <div class="members-heading">
+      <h2>KRL<br>Members</h2>
+    </div>
+
+    <div class="members-scatter" id="membersScatter">
+
+      <a href="leads.html#lead-anil-kumar" class="member-name member-senior">Anil Kumar</a>
+      <a href="leads.html#lead-vamsi" class="member-name member-senior">Vamsi</a>
+      <a href="leads.html#lead-satyasree" class="member-name member-senior">Satya Sree</a>
+      <a href="leads.html#lead-vijay" class="member-name member-senior">Vijay</a>
+      <a href="leads.html#lead-raju" class="member-name member-senior">Raju</a>
+      <a href="leads.html#lead-hari" class="member-name member-senior">Hari</a>
+      <a href="leads.html#lead-rahitya" class="member-name member-senior">Rahitya</a>
+      <a href="leads.html#lead-hema" class="member-name member-senior">Hema</a>
+
+      <a href="members.html#member-darla-praveen" class="member-name member-junior">Darla Praveen</a>
+      <a href="members.html#member-puli-hemanth" class="member-name member-junior">Puli Hemanth</a>
+      <a href="members.html#member-d-divya" class="member-name member-junior">D. Divya</a>
+      <a href="members.html#member-koyilada-prem" class="member-name member-junior">Koyilada Prem</a>
+      <a href="members.html#member-a-anjali" class="member-name member-junior">A. Anjali</a>
+      <a href="members.html#member-t-ramu" class="member-name member-junior">T. Ramu</a>
+      <a href="members.html#member-g-ganga-lakshmi" class="member-name member-junior">G. Ganga Lakshmi</a>
+      <a href="members.html#member-kusuma-latha" class="member-name member-junior">Kusuma Latha</a>
+      <a href="members.html#member-jyothikaharshini" class="member-name member-junior">Jyothikaharshini</a>
+      <a href="members.html#member-g-s-n-sirisha" class="member-name member-junior">G. S. N. Sirisha</a>
+      <a href="members.html#member-b-sowmya-sri" class="member-name member-junior">B. Sowmya Sri</a>
+      <a href="members.html#member-m-uma-devi" class="member-name member-junior">M. Uma Devi</a>
+      <a href="members.html#member-jhansi-cheduluri" class="member-name member-junior">Jhansi Cheduluri</a>
+      <a href="members.html#member-p-lakshmi-priyanka" class="member-name member-junior">P. Lakshmi Priyanka</a>
+      <a href="members.html#member-chandra-bhanu-singh" class="member-name member-junior">Chandra Bhanu Singh</a>
+      <a href="members.html#member-m-anand-sagar" class="member-name member-junior">M. Anand Sagar</a>
+      <a href="members.html#member-l-sri-hasini" class="member-name member-junior">L. Sri Hasini</a>
+      <a href="members.html#member-p-prudhvi-naga-raju" class="member-name member-junior">P. Prudhvi Naga Raju</a>
+      <a href="members.html#member-j-manikanta-suresh" class="member-name member-junior">J. Manikanta Suresh</a>
+      <a href="members.html#member-t-anushka" class="member-name member-junior">T. Anushka</a>
+      <a href="members.html#member-s-uma-shankar" class="member-name member-junior">S. Uma Shankar</a>
+      <a href="members.html#member-ch-srivalli" class="member-name member-junior">Ch. Srivalli</a>
+      <a href="members.html#member-a-satya-chandrika" class="member-name member-junior">A. Satya Chandrika</a>
+      <a href="members.html#member-p-madhuri" class="member-name member-junior">P. Madhuri</a>
+      <a href="members.html#member-m-supraja" class="member-name member-junior">M. Supraja</a>
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    &copy; 2024 KIET Robotics Lab. Crafted with <span>&#9679;</span> ambition.
+  </footer>
+
+  <script src="script.js?v=3"></script>
+</body>
+
+</html>

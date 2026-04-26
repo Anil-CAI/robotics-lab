@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — KRL</title>
+  <link rel="stylesheet" href="style.css?v=3">
+  <style>
+    /* ============================================================
+       PROJECTS PAGE — Cinematic Full-Screen Sections
+       ============================================================ */
+
+    /* Filter bar — sticky horizontal */
+    .projects-page-layout {
+      display: block;
+      padding: 0;
+      max-width: none;
+      gap: 0;
+    }
+
+    .projects-filter {
+      position: sticky;
+      top: 60px;
+      z-index: 100;
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      padding: 16px 40px;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      justify-content: center;
+      width: 100%;
+    }
+
+    .projects-filter .filter-btn {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ===== Full-Screen Project Section ===== */
+    .project-section-full {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      /* Scroll entrance */
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      scroll-margin-top: 120px;
+    }
+
+    .project-section-full.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Video Background */
+    .project-bg-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    /* Dark Overlay */
+    .project-section-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.75) 100%);
+    }
+
+    /* Content Layer */
+    .project-section-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+      max-width: 900px;
+    }
+
+    /* Staggered children — start hidden */
+    .project-section-content>* {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .project-section-full.visible .project-section-content>*:nth-child(1) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.1s;
+    }
+
+    .project-section-full.visible .project-section-content>*:nth-child(2) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.2s;
+    }
+
+    .project-section-full.visible .project-section-content>*:nth-child(3) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.3s;
+    }
+
+    .project-section-full.visible .project-section-content>*:nth-child(4) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.4s;
+    }
+
+    .project-section-full.visible .project-section-content>*:nth-child(5) {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.5s;
+    }
+
+    /* Domain Badge */
+    .project-section-content .project-domain-badge {
+      margin-bottom: 24px;
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+    }
+
+    /* Question Heading */
+    .project-section-question {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 5vw, 72px);
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.15;
+      max-width: 800px;
+      margin: 0;
+    }
+
+    /* Divider */
+    .project-section-divider {
+      width: 60px;
+      height: 1px;
+      background: #c9a84c;
+      margin: 24px auto;
+    }
+
+    /* Member */
+    .project-section-member {
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.65);
+      letter-spacing: 0.05em;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Tags — white-bordered pills */
+    .project-section-content .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 24px;
+    }
+
+    .project-section-content .project-tag {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.4px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+
+    .project-section-content .project-tag:hover {
+      border-color: #c9a84c;
+      background: rgba(201, 168, 76, 0.15);
+    }
+
+    /* Section Number Watermark */
+    .project-section-number {
+      position: absolute;
+      bottom: 20px;
+      right: 40px;
+      font-size: 120px;
+      font-weight: 900;
+      color: rgba(255, 255, 255, 0.06);
+      pointer-events: none;
+      z-index: 2;
+      font-family: 'Inter', sans-serif;
+      line-height: 1;
+    }
+
+    /* Scroll hint on first section */
+    .project-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.45;
+      animation: projectScrollBounce 2s ease infinite;
+    }
+
+    .project-scroll-hint span {
+      font-size: 0.65rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .project-scroll-hint .scroll-line {
+      width: 1px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes projectScrollBounce {
+
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(6px);
+      }
+    }
+
+    /* VR badge color */
+    .badge-vr {
+      background: #f0e8f8;
+      color: #2f1a4a;
+    }
+
+    /* ===== Idle Text Fade — reveals video when user stays on section ===== */
+    .project-section-content {
+      transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .project-section-full.idle .project-section-content {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    .project-section-full.idle .project-section-overlay {
+      transition: background 1.2s ease;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    .project-section-full.idle .project-section-number {
+      transition: opacity 1.2s ease;
+      opacity: 0;
+    }
+
+    /* ============================================================
+       PROJECTS PAGE — HAND POINTER CURSOR
+       ============================================================ */
+    #proj-hand-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 32px;
+      height: 38px;
+      pointer-events: none;
+      z-index: 99998;
+      opacity: 0;
+      /* Hotspot = tip of index finger (top of SVG) */
+      margin-left: -7px;
+      margin-top: -2px;
+      transition: opacity 0.2s ease, transform 0.1s ease;
+      transform-origin: 7px 2px;
+    }
+    #proj-hand-cursor.proj-h-visible { opacity: 1; }
+    /* Scale up slightly when hovering links/buttons */
+    #proj-hand-cursor.proj-h-hover   { transform: scale(1.18); }
+    #proj-hand-cursor svg {
+      width: 32px;
+      height: 38px;
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.55));
+    }
+
+    /* ===== Mobile ===== */
+    @media (max-width: 768px) {
+      .project-section-full {
+        height: 100dvh; /* Dynamic viewport height for mobile */
+        min-height: 560px; /* Ensure enough space for content */
+      }
+
+      .project-bg-video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .projects-filter {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding: 12px 16px;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .projects-filter::-webkit-scrollbar {
+        display: none;
+      }
+
+      .project-section-question {
+        font-size: clamp(26px, 8vw, 42px);
+        line-height: 1.2;
+      }
+
+      .project-section-member {
+        font-size: 13px;
+        margin-top: 10px;
+      }
+
+      .project-section-content .project-tags {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 20px;
+      }
+
+      .project-tag {
+        padding: 4px 12px;
+        font-size: 0.7rem;
+      }
+
+      .project-section-number {
+        display: none;
+      }
+
+      .project-section-content {
+        padding: 40px 24px;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-projects">
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <div class="cursor-dot" id="cursorDot" style="display:none;"></div>
+
+  <div id="proj-hand-cursor">
+
+    <svg viewBox="0 0 32 38" xmlns="http://www.w3.org/2000/svg"
+         fill="none" stroke="#ffffff" stroke-width="1.6"
+         stroke-linejoin="round" stroke-linecap="round">
+
+      <rect x="5" y="0" width="6" height="18" rx="3"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+
+      <rect x="11" y="5" width="6" height="13" rx="3"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+
+      <rect x="17" y="7" width="6" height="11" rx="3"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+
+      <rect x="23" y="9" width="5" height="9" rx="2.5"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+
+      <path d="M5 16 Q4 20 4 26 L4 32 Q4 37 9 37 L23 37 Q28 37 28 32 L28 18 Q28 15 25 15 L23 15 Q21 14 17 14 L17 12"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+
+      <path d="M4 22 Q0 22 0 26 Q0 30 4 30"
+            fill="#ffffff" stroke="#1a1a1a" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="navbar-dot"></span>
+      Robotics Lab
+    </a>
+    <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="navbar-right" id="navMenu">
+      <a href="index.html#vision" class="navbar-link">Vision</a>
+      <a href="index.html#about" class="navbar-link">About</a>
+      <a href="projects.html" class="navbar-link">Projects</a>
+      <a href="members.html" class="navbar-link">Members</a>
+      <a href="join.html" class="btn-join">Connect</a>
+    </div>
+  </nav>
+
+  <div class="projects-page-header">
+    <h1>Our Projects</h1>
+    <p>Research-driven engineering at the intersection of AI, robotics, and real-world systems.</p>
+  </div>
+
+  <div class="projects-page-layout">
+    <div class="projects-filter" id="projectsFilter">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="robotics">Robotics</button>
+      <button class="filter-btn" data-filter="nlp">NLP / LLM</button>
+      <button class="filter-btn" data-filter="cv">Computer Vision</button>
+      <button class="filter-btn" data-filter="vr">VR / AR</button>
+    </div>
+  </div>
+
+  <section class="project-section-full" id="project-01" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/How_Does_slam_works.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Robotics</span>
+      <h2 class="project-section-question">How does SLAM work in real-time?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">P. Madhuri</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">SLAM</span>
+        <span class="project-tag">LiDAR</span>
+        <span class="project-tag">Python</span>
+      </div>
+    </div>
+    <div class="project-section-number">01</div>
+    <div class="project-scroll-hint"><span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <section class="project-section-full" id="project-02" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Can_robots_navigate_without_gps.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Robotics</span>
+      <h2 class="project-section-question">Can robots navigate without GPS?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Darla Praveen</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">3D Point Cloud</span>
+        <span class="project-tag">LiDAR</span>
+      </div>
+    </div>
+    <div class="project-section-number">02</div>
+  </section>
+
+  <section class="project-section-full" id="project-03" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Can%20robots%20learn%20by%20themselves.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Robotics</span>
+      <h2 class="project-section-question">Can robots learn by themselves?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">T. Ramu · S. Uma Shankar</div>
+      <div class="project-tags">
+        <span class="project-tag">Reinforcement Learning</span>
+        <span class="project-tag">Go2W</span>
+        <span class="project-tag">ROS</span>
+      </div>
+    </div>
+    <div class="project-section-number">03</div>
+  </section>
+
+  <section class="project-section-full" id="project-04" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/How%20do%20robots%20see%20the%20world%20in%203D.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Robotics</span>
+      <h2 class="project-section-question">How do robots see the world in 3D?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">M. Anand Sagar · Jhansi · Lakshmi Priyanka · Anushka · Satya Chandrika</div>
+      <div class="project-tags">
+        <span class="project-tag">RL</span>
+        <span class="project-tag">Go2 Bot</span>
+        <span class="project-tag">ROS2</span>
+      </div>
+    </div>
+    <div class="project-section-number">04</div>
+  </section>
+
+  <section class="project-section-full" id="project-05" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/How%20does%202D%20become%203D%20navigation.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Robotics</span>
+      <h2 class="project-section-question">How does 2D become 3D navigation?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Chandra Bhanu Singh · Puli Hemanth</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">Mapping</span>
+        <span class="project-tag">Navigation</span>
+      </div>
+    </div>
+    <div class="project-section-number">05</div>
+  </section>
+
+  <section class="project-section-full" id="project-06" data-domain="nlp">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Can%20robots%20understand%20human%20speech.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-nlp">NLP / LLM</span>
+      <h2 class="project-section-question">Can robots understand human speech?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">G. Ganga Lakshmi · G. S. N. Sirisha · B. Sowmya Sri · P. Prudhvi Naga Raju · Sri Hasini · Anjali · Manikanta</div>
+      <div class="project-tags">
+        <span class="project-tag">Python</span>
+        <span class="project-tag">Whisper</span>
+        <span class="project-tag">Offline STT</span>
+        <span class="project-tag">Telugu NLP</span>
+      </div>
+    </div>
+    <div class="project-section-number">06</div>
+  </section>
+
+  <section class="project-section-full" id="project-07" data-domain="nlp">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Can%20AI%20run%20fully%20offline%20in%20your%20language.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-nlp">NLP / LLM</span>
+      <h2 class="project-section-question">Can AI run fully offline in your language?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">G. Ganga Lakshmi · G. S. N. Sirisha · Jyothikaharshini · Srivalli</div>
+      <div class="project-tags">
+        <span class="project-tag">Whisper</span>
+        <span class="project-tag">Telugu</span>
+        <span class="project-tag">Edge AI</span>
+      </div>
+    </div>
+    <div class="project-section-number">07</div>
+  </section>
+
+  <section class="project-section-full" id="project-11" data-domain="vr">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/VR%20Controlling%20the%20robot.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-vr">VR / AR</span>
+      <h2 class="project-section-question">Is VR controlling the robots?</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Anil Kumar</div>
+      <div class="project-tags">
+        <span class="project-tag">Development &amp; Designer</span>
+        <span class="project-tag">Unity</span>
+        <span class="project-tag">VR / ROS</span>
+      </div>
+    </div>
+    <div class="project-section-number">11</div>
+  </section>
+
+  <section class="project-section-full" id="project-14" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Autonomous%20Mapping%20using%20ROS%202.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Navigation</span>
+      <h2 class="project-section-question">Autonomous Mapping using ROS 2</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Vijay</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">Autonomous Mapping</span>
+        <span class="project-tag">Navigation</span>
+      </div>
+    </div>
+    <div class="project-section-number">14</div>
+  </section>
+
+  <section class="project-section-full" id="project-15" data-domain="robotics">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Vision-Only%203D%20Mapping%20with%20RTAB-Map%20%7C%20ROS%202.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-robotics">Navigation</span>
+      <h2 class="project-section-question">Vision-Only 3D Mapping with RTAB-Map | ROS 2</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Rahitya</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">RTAB-Map</span>
+        <span class="project-tag">3D Mapping</span>
+        <span class="project-tag">Computer Vision</span>
+      </div>
+    </div>
+    <div class="project-section-number">15</div>
+  </section>
+
+  <section class="project-section-full" id="project-16" data-domain="cv">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Road%20Segmentation%20with%20Depth%20Cameras.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-cv">Computer Vision</span>
+      <h2 class="project-section-question">Road Segmentation with Depth Cameras</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Rahitya</div>
+      <div class="project-tags">
+        <span class="project-tag">OpenCV</span>
+        <span class="project-tag">Depth Cameras</span>
+        <span class="project-tag">Segmentation</span>
+      </div>
+    </div>
+    <div class="project-section-number">16</div>
+  </section>
+
+  <section class="project-section-full" id="project-17" data-domain="nlp">
+    <video class="project-bg-video" autoplay muted loop playsinline>
+      <source src="assets/Voice-Controlled%20Robot%20Dog%20using%20ROS%202.mp4" type="video/mp4">
+    </video>
+    <div class="project-section-overlay"></div>
+    <div class="project-section-content">
+      <span class="project-domain-badge badge-nlp">NLP / LLM</span>
+      <h2 class="project-section-question">Voice-Controlled Robot Dog using ROS 2</h2>
+      <div class="project-section-divider"></div>
+      <div class="project-section-member">Satyasree</div>
+      <div class="project-tags">
+        <span class="project-tag">ROS2</span>
+        <span class="project-tag">Voice Control</span>
+        <span class="project-tag">LLM</span>
+        <span class="project-tag">NLP</span>
+      </div>
+    </div>
+    <div class="project-section-number">17</div>
+  </section>
+
+  <footer class="footer" style="color: #555; border-color: rgba(255,255,255,0.06);">
+    &copy; 2024 KIET Robotics Lab. Crafted with <span style="color: #c9a84c;">&#9679;</span> ambition.
+  </footer>
+
+  <script src="script.js?v=3"></script>
+  <script>
+    /* ============================================================
+       PROJECTS PAGE — Section Reveal + Filter Logic
+       ============================================================ */
+    (function () {
+
+      /* ---------- 1. Scroll Reveal via IntersectionObserver ---------- */
+      const projectSections = document.querySelectorAll('.project-section-full');
+
+      const projectObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2 });
+
+      projectSections.forEach(sec => projectObserver.observe(sec));
+
+      /* ---------- 1b. Idle Text Fade + Audio — hide text & unmute video after 3s idle ---------- */
+      const IDLE_DELAY = 3000;  // ms before text fades
+      let idleTimers = new Map();
+      let currentIdle = null;
+
+      /* Smoothly ramp video volume up or down */
+      function setVideoAudio(sec, unmute) {
+        const video = sec.querySelector('.project-bg-video');
+        if (!video) return;
+
+        // Cancel any ongoing ramp
+        if (video._audioRaf) {
+          cancelAnimationFrame(video._audioRaf);
+          video._audioRaf = null;
+        }
+
+        const step = unmute ? 0.04 : 0.06;   // unmute slower, mute faster
+
+        if (unmute) {
+          video.muted  = false;   // must unmute before touching volume
+          video.volume = 0;
+        }
+
+        function ramp() {
+          if (unmute) {
+            video.volume = Math.min(1, video.volume + step);
+            if (video.volume < 1) { video._audioRaf = requestAnimationFrame(ramp); }
+          } else {
+            video.volume = Math.max(0, video.volume - step);
+            if (video.volume > 0) {
+              video._audioRaf = requestAnimationFrame(ramp);
+            } else {
+              video.muted = true;   // re-mute after fade so browser stays happy
+            }
+          }
+        }
+        video._audioRaf = requestAnimationFrame(ramp);
+      }
+
+      const idleObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const sec = entry.target;
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.6) {
+            // Section is dominant in viewport — start idle timer
+            clearIdleTimer(sec);
+            const timer = setTimeout(() => {
+              sec.classList.add('idle');
+              currentIdle = sec;
+              setVideoAudio(sec, true);   // ← unmute when text fades
+            }, IDLE_DELAY);
+            idleTimers.set(sec, timer);
+          } else {
+            // Section left — clear timer; only touch audio if it was actually idle
+            clearIdleTimer(sec);
+            if (sec.classList.contains('idle')) {
+              sec.classList.remove('idle');
+              setVideoAudio(sec, false);  // ← only mute if section WAS idle (not on page load)
+            }
+            if (currentIdle === sec) currentIdle = null;
+          }
+        });
+      }, { threshold: 0.6 });
+
+      projectSections.forEach(sec => idleObserver.observe(sec));
+
+      function clearIdleTimer(sec) {
+        if (idleTimers.has(sec)) {
+          clearTimeout(idleTimers.get(sec));
+          idleTimers.delete(sec);
+        }
+      }
+
+      // Any scroll resets idle + mutes audio for current section
+      window.addEventListener('scroll', () => {
+        if (currentIdle) {
+          currentIdle.classList.remove('idle');
+          setVideoAudio(currentIdle, false);   // ← mute on scroll
+          clearIdleTimer(currentIdle);
+          // Restart idle timer in case user stops scrolling on same section
+          const sec = currentIdle;
+          currentIdle = null;
+          const timer = setTimeout(() => {
+            sec.classList.add('idle');
+            currentIdle = sec;
+            setVideoAudio(sec, true);           // ← unmute if user idles again
+          }, IDLE_DELAY);
+          idleTimers.set(sec, timer);
+        }
+      }, { passive: true });
+
+      /* ---------- 2. Filter Logic ---------- */
+      const filterBar = document.getElementById('projectsFilter');
+      if (!filterBar) return;
+
+      const filterBtns = filterBar.querySelectorAll('.filter-btn');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Toggle active class
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const domain = btn.dataset.filter;
+
+          // Show/hide sections
+          let firstVisible = null;
+          projectSections.forEach(sec => {
+            if (domain === 'all' || sec.dataset.domain === domain) {
+              sec.style.display = '';
+              if (!firstVisible) firstVisible = sec;
+            } else {
+              sec.style.display = 'none';
+            }
+          });
+
+          // Scroll to first matching section
+          if (firstVisible) {
+            setTimeout(() => {
+              firstVisible.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 50);
+          }
+
+          // Re-observe visible sections to trigger animations
+          projectSections.forEach(sec => {
+            if (sec.style.display !== 'none') {
+              sec.classList.remove('visible');
+              projectObserver.observe(sec);
+            }
+          });
+        });
+      });
+
+      /* ---------- 3. Hash Navigation — reveal and scroll to anchor ---------- */
+      (function () {
+        const hash = window.location.hash;
+        if (!hash) return;
+        const target = document.querySelector(hash);
+        if (target && target.classList.contains('project-section-full')) {
+          target.classList.add('visible');
+          setTimeout(() => {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 80);
+        }
+      })();
+
+    })();
+  </script>
+
+  <script>
+  (function () {
+    /* Desktop pointer only */
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
+    var h = document.getElementById('proj-hand-cursor');
+    if (!h) return;
+
+    var mouseX = -300, mouseY = -300;
+    var hX     = -300, hY     = -300;
+    var LERP   = 0.18;   /* snappy — hand cursor should feel immediate */
+
+    /* Reveal */
+    h.classList.add('proj-h-visible');
+
+    /* Lerp loop */
+    function loop() {
+      hX += (mouseX - hX) * LERP;
+      hY += (mouseY - hY) * LERP;
+      h.style.transform = 'translate(' + hX + 'px, ' + hY + 'px)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    /* Track mouse */
+    document.addEventListener('mousemove', function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    /* Hide when pointer leaves window */
+    document.addEventListener('mouseleave', function () {
+      h.classList.remove('proj-h-visible');
+    });
+    document.addEventListener('mouseenter', function () {
+      h.classList.add('proj-h-visible');
+    });
+
+    /* Hover: scale up on interactive targets */
+    var HOVER = 'a, button, [onclick], .filter-btn, .project-tag';
+    document.addEventListener('mouseover', function (e) {
+      if (e.target.closest(HOVER)) h.classList.add('proj-h-hover');
+    });
+    document.addEventListener('mouseout', function (e) {
+      if (e.target.closest(HOVER)) h.classList.remove('proj-h-hover');
+    });
+  })();
+  </script>
+</body>
+
+</html>

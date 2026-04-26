@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Members — KRL</title>
+  <link rel="stylesheet" href="style.css?v=3">
+
+  <style>
+    /* ===== Page-Level ===== */
+    body.page-members {
+      background: #f0ede6;
+      color: #1a1a1a;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* ===== Header ===== */
+    .members-page-header {
+      background: transparent;
+      padding: 140px 40px 80px;
+      text-align: center;
+    }
+
+    .members-page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(52px, 8vw, 100px);
+      color: #1a1a1a;
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+
+    .members-page-header p {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      color: #888;
+      max-width: 500px;
+      margin: 0 auto 28px;
+    }
+
+    .members-page-header .header-line {
+      width: 40px;
+      height: 2px;
+      background: #c9a84c;
+      margin: 0 auto;
+    }
+
+    /* ===== Filter Bar ===== */
+    .members-filter-bar {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 0 40px 60px;
+    }
+
+    .mfilter-btn {
+      padding: 8px 22px;
+      border-radius: 999px;
+      border: 1.5px solid #d0cdc7;
+      background: transparent;
+      color: #555;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .mfilter-btn:hover {
+      border-color: #c9a84c;
+      color: #c9a84c;
+    }
+
+    .mfilter-btn.active {
+      background: #1a1a1a;
+      border-color: #1a1a1a;
+      color: #f0ede6;
+    }
+
+    /* ===== Members List ===== */
+    .members-list {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 40px 120px;
+    }
+
+    .member-row {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 28px;
+      align-items: center;
+      padding: 28px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      transition: background 0.25s ease, padding 0.25s ease;
+      border-radius: 12px;
+      cursor: default;
+      opacity: 0;
+      transform: translateX(-20px);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.25s ease, padding 0.25s ease;
+      scroll-margin-top: 100px;
+    }
+
+    .member-row.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .member-row:hover {
+      background: rgba(201, 168, 76, 0.06);
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    /* Filter hide/show */
+    .member-row.filter-hidden {
+      opacity: 0 !important;
+      pointer-events: none;
+      position: absolute;
+      visibility: hidden;
+    }
+
+    /* Photo circle */
+    .member-row-photo {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      overflow: hidden;
+      flex-shrink: 0;
+      background: #e8e4dc;
+    }
+
+    .member-row-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* Initials fallback */
+    .member-row-initials {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #c9a84c;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+    }
+
+    /* Info block */
+    .member-row-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .member-row-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .member-row-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0;
+    }
+
+    .member-row-roll {
+      font-size: 12px;
+      color: #aaa;
+      letter-spacing: 0.08em;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .member-row-projects {
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .member-row-projects li {
+      font-size: 13px;
+      color: #666;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .member-row-projects li::before {
+      content: '\2192  ';
+      color: #c9a84c;
+      font-size: 11px;
+    }
+
+    .member-row-email a {
+      font-size: 12px;
+      color: #999;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .member-row-email a:hover {
+      color: #c9a84c;
+    }
+
+    /* Social links (GitHub, etc.) */
+    .member-row-socials {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-end;
+    }
+
+    .member-social-link {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #999;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .member-social-link svg {
+      flex-shrink: 0;
+      width: 14px;
+      height: 14px;
+      opacity: 0.6;
+      transition: opacity 0.2s ease;
+    }
+
+    .member-social-link:hover {
+      color: #1a1a1a;
+    }
+
+    .member-social-link:hover svg {
+      opacity: 1;
+    }
+
+    /* Domain badges */
+    .member-domain {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .domain-robotics {
+      background: #e8f0f8;
+      color: #1a2f4a;
+    }
+
+    .domain-nlp {
+      background: #e8f8ee;
+      color: #1a4a2f;
+    }
+
+    .domain-cv {
+      background: #f0e8f8;
+      color: #2f1a4a;
+    }
+
+    .domain-robotic-arm {
+      background: #f8e8e8;
+      color: #4a1a1a;
+    }
+
+    /* ===== Mobile ===== */
+    @media (max-width: 768px) {
+      .members-page-header {
+        padding: 100px 24px 40px;
+      }
+
+      .members-page-header h1 {
+        font-size: 52px;
+      }
+
+      .member-row {
+        grid-template-columns: 60px 1fr;
+        grid-template-rows: auto auto;
+        gap: 16px;
+        padding: 24px 0;
+        align-items: flex-start;
+      }
+
+      .member-row-photo,
+      .member-row-initials {
+        width: 56px;
+        height: 56px;
+        grid-row: 1 / span 1;
+      }
+
+      .member-row-info {
+        grid-column: 2;
+        gap: 6px;
+      }
+
+      .member-row-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .member-row-name {
+        font-size: 17px;
+      }
+
+      .member-domain {
+        font-size: 10px;
+        padding: 2px 8px;
+        margin-top: 2px;
+      }
+
+      .member-row-socials {
+        grid-column: 1 / span 2;
+        align-items: flex-start;
+        margin-top: 12px;
+        padding-left: 0;
+        border-top: 1px solid rgba(0,0,0,0.04);
+        padding-top: 12px;
+        width: 100%;
+      }
+
+      .member-social-link {
+        font-size: 11px;
+        white-space: normal;
+        word-break: break-all;
+      }
+
+      .members-list {
+        padding: 0 24px 80px;
+      }
+
+      .member-row:hover {
+        padding-left: 0;
+        padding-right: 0;
+        background: transparent;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-members">
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+
+  <nav class="navbar" id="navbar">
+    <a href="index.html" class="navbar-brand">
+      <span class="navbar-dot"></span>
+      Robotics Lab
+    </a>
+    <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="navbar-right" id="navMenu">
+      <a href="index.html#vision" class="navbar-link">Vision</a>
+      <a href="index.html#about" class="navbar-link">About</a>
+      <a href="projects.html" class="navbar-link">Projects</a>
+      <a href="members.html" class="navbar-link">Members</a>
+      <a href="join.html" class="btn-join">Connect</a>
+    </div>
+  </nav>
+
+  <div class="members-page-header">
+    <h1>Our Team</h1>
+    <p>The minds behind every rover, every line of code, and every breakthrough.</p>
+    <div class="header-line"></div>
+  </div>
+
+  <div class="members-filter-bar">
+    <button class="mfilter-btn active" data-filter="all">All</button>
+    <button class="mfilter-btn" data-filter="robotics">Robotics</button>
+    <button class="mfilter-btn" data-filter="nlp">NLP / LLM</button>
+    <button class="mfilter-btn" data-filter="cv">Computer Vision</button>
+    <button class="mfilter-btn" data-filter="robotic-arm">Robotic Arm</button>
+  </div>
+
+  <div class="members-list" id="membersList">
+
+    <div class="member-row" id="member-a-satya-chandrika" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/A. Satya Chandrika.jpg" alt="A. Satya Chandrika"
+          onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">A. Satya Chandrika</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">25JN5A4505</div>
+        <ul class="member-row-projects">
+          <li>PPE Detection in Construction (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:satyachandrika980@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          satyachandrika980@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/satyachandrika980-lab" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/satyachandrika980-lab
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-l-sri-hasini" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/Lakkamraju Sri hasini.jpg" alt="L. Sri Hasini"
+          onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">L. Sri Hasini</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">24JN1A4581</div>
+        <ul class="member-row-projects">
+          <li>TTS &amp; STT, Mini Chatbot, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:srihasinilakkamraju@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          srihasinilakkamraju@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/hasini263" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/hasini263
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-jhansi-cheduluri" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/Jhansi Cheduluri.jpg" alt="Jhansi Cheduluri"
+          onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Jhansi Cheduluri</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">25B25A4406</div>
+        <ul class="member-row-projects">
+          <li>Helmet Detection, PPE Detection (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:jhansicheduluri@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          jhansicheduluri@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/JhansiCheduluri" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/JhansiCheduluri
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-darla-praveen" data-domain="robotics">
+      <div class="member-row-photo">
+        <img src="assets/images/Darla Praveen.jpg" alt="Darla Praveen" onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Darla Praveen</h3>
+          <span class="member-domain domain-robotics">Robotics</span>
+        </div>
+        <div class="member-row-roll">256Q5A4610</div>
+        <ul class="member-row-projects">
+          <li>3D Point Cloud Mapping &amp; Navigation</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:dpraveen437@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          dpraveen437@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/praveen1darla" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/praveen1darla
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-puli-hemanth" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/Hemanth P.jpg" alt="Puli Hemanth" onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Puli Hemanth</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">256Q5A4206</div>
+        <ul class="member-row-projects">
+          <li>Parcel Detection</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:hemanth0337@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          hemanth0337@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/PHemanthsaikumar" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/PHemanthsaikumar
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-t-ramu" data-domain="robotics">
+      <div class="member-row-photo">
+        <img src="assets/images/Ramu.jpg" alt="T. Ramu" onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">T. Ramu</h3>
+          <span class="member-domain domain-robotics">Robotics</span>
+        </div>
+        <div class="member-row-roll">256Q5A4309</div>
+        <ul class="member-row-projects">
+          <li>Go2W using RL, Rover</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:ramutandra2005@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          ramutandra2005@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/Ramu1048" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/Ramu1048
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-p-prudhvi-naga-raju" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/Prudhvi Naga Raju Parasa.jpg" alt="P. Prudhvi Naga Raju"
+          onerror="this.src='assets/images/no image.jpg'">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">P. Prudhvi Naga Raju</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A4340</div>
+        <ul class="member-row-projects">
+          <li>STT &amp; TTS, Offline AI Voice Assistant</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:prudhviparasa95@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          prudhviparasa95@gmail.com
+        </a>
+        <a class="member-social-link" href="https://github.com/Prudhvi-CAI" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+          github.com/Prudhvi-CAI
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-d-divya" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="D. Divya">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">D. Divya</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">246Q1A4320</div>
+        <ul class="member-row-projects">
+          <li>Speech to Text</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:divyadoolla45@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          divyadoolla45@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-koyilada-prem" data-domain="robotic-arm">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="Koyilada Prem">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Koyilada Prem V. S. S. Naidu</h3>
+          <span class="member-domain domain-robotic-arm">Robotic Arm</span>
+        </div>
+        <div class="member-row-roll">24B21A4539</div>
+        <ul class="member-row-projects">
+          <li>Robotic Arm Project</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:premkoyilada@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          premkoyilada@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-a-anjali" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="A. Anjali">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">A. Anjali</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A43A3</div>
+        <ul class="member-row-projects">
+          <li>Speech to Text</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:anjaliande04@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          anjaliande04@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-g-ganga-lakshmi" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="G. Ganga Lakshmi">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">G. Ganga Lakshmi</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A4371</div>
+        <ul class="member-row-projects">
+          <li>STT &amp; TTS, Offline Telugu STT</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:gowthamiganesula03@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          gowthamiganesula03@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-kusuma-latha" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="Kusuma Latha B">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Kusuma Latha B</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">25B25A4405</div>
+        <ul class="member-row-projects">
+          <li>Text to Speech, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:kusumab2526@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          kusumab2526@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-jyothikaharshini" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="Bande Jyothikaharshini">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Bande Jyothikaharshini</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">25B25A4401</div>
+        <ul class="member-row-projects">
+          <li>STT &amp; TTS, Voice Interface, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:jyothikaharshini2209@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          jyothikaharshini2209@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-g-s-n-sirisha" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="G. S. N. Sirisha">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">G. S. N. Sirisha</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A4358</div>
+        <ul class="member-row-projects">
+          <li>STT &amp; TTS, Offline Telugu STT</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:gubbalasirisha296@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          gubbalasirisha296@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-b-sowmya-sri" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="B. Sowmya Sri">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">B. Sowmya Sri</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A43A4</div>
+        <ul class="member-row-projects">
+          <li>STT &amp; TTS, Offline Telugu STT</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:bsowmya1547@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          bsowmya1547@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-m-uma-devi" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="M. Uma Devi">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">M. Uma Devi</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">25B25A4506</div>
+        <ul class="member-row-projects">
+          <li>TTS &amp; STT, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:umadevimatha022@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          umadevimatha022@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-p-lakshmi-priyanka" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="P. Lakshmi Priyanka">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">P. Lakshmi Priyanka</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">25B25A4307</div>
+        <ul class="member-row-projects">
+          <li>Helmet Detection, PPE Detection (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:polamlakshmipriyanka1@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          polamlakshmipriyanka1@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-chandra-bhanu-singh" data-domain="robotics">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="Chandra Bhanu Singh">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">T K P B Chandra Bhanu Singh</h3>
+          <span class="member-domain domain-robotics">Robotics</span>
+        </div>
+        <div class="member-row-roll">256Q5A4305</div>
+        <ul class="member-row-projects">
+          <li>2D to 3D Navigation</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:karthiksinghtakur09@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          karthiksinghtakur09@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-m-anand-sagar" data-domain="robotics">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="M. Anand Sagar">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">M. Anand Sagar</h3>
+          <span class="member-domain domain-robotics">Robotics</span>
+        </div>
+        <div class="member-row-roll">24B21A4259</div>
+        <ul class="member-row-projects">
+          <li>Training Go2 Bot using RL</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:anandsagar19659@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          anandsagar19659@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-j-manikanta-suresh" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="J. Manikanta Suresh">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">J. Manikanta Suresh</h3>
+          <span class="member-domain domain-nlp">NLP</span>
+        </div>
+        <div class="member-row-roll">24B21A4399</div>
+        <ul class="member-row-projects">
+          <li>Speech to Text</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:manikantasuresh1405@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          manikantasuresh1405@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-t-anushka" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="T. Anushka">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">T. Anushka</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">25JN5A4203</div>
+        <ul class="member-row-projects">
+          <li>PPE Detection in Construction (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:anushkathota85@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          anushkathota85@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-s-uma-shankar" data-domain="cv">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="S. Uma Shankar">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">S. Uma Shankar</h3>
+          <span class="member-domain domain-cv">Computer Vision</span>
+        </div>
+        <div class="member-row-roll">24B21A4597</div>
+        <ul class="member-row-projects">
+          <li>Object Detection</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:satyamsettishankar@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          satyamsettishankar@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-ch-srivalli" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="Ch. Srivalli">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">Ch. Srivalli</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">24JN1A4313</div>
+        <ul class="member-row-projects">
+          <li>TTS, STT, Voice Assistant, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:jsrivalli13@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          jsrivalli13@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-p-madhuri" data-domain="robotics">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="P. Madhuri">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">P. Madhuri</h3>
+          <span class="member-domain domain-robotics">Robotics</span>
+        </div>
+        <div class="member-row-roll">23JN1A4521</div>
+        <ul class="member-row-projects">
+          <li>Rover with SLAM &amp; Navigation using ROS2</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:madhuripoliseti83@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          madhuripoliseti83@gmail.com
+        </a>
+      </div>
+    </div>
+
+    <div class="member-row" id="member-m-supraja" data-domain="nlp">
+      <div class="member-row-photo">
+        <img src="assets/images/no image.jpg" alt="M. Supraja">
+      </div>
+      <div class="member-row-info">
+        <div class="member-row-top">
+          <h3 class="member-row-name">M. Supraja</h3>
+          <span class="member-domain domain-nlp">NLP / LLM</span>
+        </div>
+        <div class="member-row-roll">25B25A4507</div>
+        <ul class="member-row-projects">
+          <li>TTS &amp; STT, LLM (in progress)</li>
+        </ul>
+      </div>
+      <div class="member-row-socials">
+        <a class="member-social-link" href="mailto:mallarpusupraja@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+          </svg>
+          mallarpusupraja@gmail.com
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    &copy; 2024 KIET Robotics Lab. Crafted with <span>&#9679;</span> ambition.
+  </footer>
+
+  <script src="script.js"></script>
+
+  <script>
+    (function () {
+      /* ---------- 1. Scroll Reveal ---------- */
+      const rows = document.querySelectorAll('.member-row');
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      rows.forEach((row, i) => {
+        row.style.transitionDelay = (i * 0.05) + 's';
+        revealObserver.observe(row);
+      });
+
+      /* ---------- 2. Filter ---------- */
+      const filterBtns = document.querySelectorAll('.mfilter-btn');
+
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const filter = btn.dataset.filter;
+
+          rows.forEach((row, i) => {
+            const match = filter === 'all' || row.dataset.domain === filter;
+            if (match) {
+              row.classList.remove('filter-hidden');
+              row.style.transitionDelay = (i * 0.05) + 's';
+            } else {
+              row.classList.add('filter-hidden');
+            }
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>
