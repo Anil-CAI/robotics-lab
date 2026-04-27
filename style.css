@@ -153,37 +153,76 @@ img, video {
   100% { opacity: 0; }
 }
 
-html {
-  scroll-snap-type: y mandatory;
+/* ── Scroll snap: desktop only ── */
+@media (min-width: 769px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+  .section-inner {
+    scroll-snap-align: start;
+  }
 }
 
 .section-inner {
   min-height: 100vh;
   width: 100%;
-  scroll-snap-align: start;
-  overflow: hidden;
+  overflow: visible;
   background: var(--bg);
   position: relative;
-
   opacity: 0;
-  transform: translateY(60px);
-  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s ease;
 }
 
 .section-inner.section-visible {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .section-inner.active {
   opacity: 1;
-  transform: translateY(0);
 }
 
 #heroInner {
   opacity: 1 !important;
-  transform: none !important;
+}
+
+/* ── Mobile base: smooth native scrolling, no snap, no animations ── */
+@media (max-width: 768px) {
+  html {
+    scroll-snap-type: none !important;
+  }
+  body {
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+
+  /* Sections: always visible, content height (removes snap-like feel) */
+  .section-inner {
+    scroll-snap-align: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    transition: none !important;
+    transform: none !important;
+    min-height: 0 !important;
+  }
+
+  /* Hero stays full-screen (svh = constant on iOS, avoids address-bar jump) */
+  #heroInner {
+    min-height: 100svh !important;
+  }
+
+  /* Spline viewer eats touch events — disable on mobile */
+  .hero-spline-container {
+    pointer-events: none !important;
+  }
+
+  /* Kill ALL animations on mobile — zero GPU overhead */
+  *,
+  .project-pill,
+  .member-name,
+  .hero-scroll-hint,
+  #butterfly-cursor {
+    animation: none !important;
+  }
 }
 
 .navbar {
@@ -725,8 +764,8 @@ html {
 @media (max-width: 768px) {
   #membersInner {
     height: auto !important;
-    min-height: 100vh;
-    scroll-snap-align: none; 
+    min-height: 0 !important;
+    scroll-snap-align: none;
     display: block;
     padding-bottom: 80px;
   }
@@ -801,7 +840,7 @@ html {
   }
 
   .members-heading, .members-scatter .member-name {
-     animation: mobileFadeIn 0.6s ease forwards;
+     animation: none !important;
   }
 }
 
@@ -1281,7 +1320,7 @@ html {
 
   .section-inner {
     height: auto;
-    min-height: 100vh;
+    min-height: 0 !important;
     opacity: 1 !important;
     transform: none !important;
   }
@@ -1303,6 +1342,8 @@ html {
     opacity: 1 !important;
     clip-path: none !important;
     width: auto !important;
+    transition: none !important;
+    animation: none !important;
   }
 
   #visionInner {
@@ -1364,15 +1405,10 @@ html {
     padding: 14px 24px !important;
     margin: 4px 0 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-    animation: float-mobile-alt 4s ease-in-out infinite alternate !important;
+    animation: none !important;
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
-  }
-
-  @keyframes float-mobile-alt {
-    from { transform: translateY(0); }
-    to { transform: translateY(-8px); }
   }
 
   #projectsInner .project-pill:nth-child(n) {
@@ -1408,7 +1444,7 @@ html {
   #membersInner {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 0 !important;
     padding: 80px 24px 60px;
   }
 
@@ -1429,7 +1465,7 @@ html {
   .members-scatter {
     position: relative;
     inset: auto;
-    min-height: 60vh;
+    min-height: 0;
   }
 
   .member-name {
@@ -1487,40 +1523,45 @@ html {
   transform: scale(0);
 }
 
-.section-inner .vision-header,
-.section-inner .vision-card,
-.section-inner .about-hr,
-.section-inner .about-video-wrap,
-.section-inner .about-text,
-.section-inner .projects-top-label,
-.section-inner .project-pill,
-.section-inner .members-heading,
-.section-inner .member-name {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+/* Desktop staggered reveals — explicitly desktop-only to avoid mobile blank flash */
+@media (min-width: 769px) {
+  .section-inner .vision-header,
+  .section-inner .vision-card,
+  .section-inner .about-hr,
+  .section-inner .about-video-wrap,
+  .section-inner .about-text,
+  .section-inner .projects-top-label,
+  .section-inner .project-pill,
+  .section-inner .members-heading,
+  .section-inner .member-name {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
 }
 
-.section-inner.section-visible .vision-header       { opacity:1; transform:none; transition-delay: 0.1s; }
-.section-inner.section-visible .vision-card         { opacity:1; transform:none; transition-delay: 0.2s; }
-.section-inner.section-visible .vision-card:nth-child(2) { transition-delay: 0.32s; }
-.section-inner.section-visible .vision-card:nth-child(3) { transition-delay: 0.44s; }
-.section-inner.section-visible .about-hr            { opacity:1; transform:none; transition-delay: 0.05s; }
-.section-inner.section-visible .about-video-wrap    { opacity:1; transform:none; transition-delay: 0.15s; }
-.section-inner.section-visible .about-text          { opacity:1; transform:none; transition-delay: 0.3s; }
-.section-inner.section-visible .projects-top-label  { opacity:1; transform:none; transition-delay: 0.1s; }
-.section-inner.section-visible .project-pill        { opacity:1; transform:none; }
-.section-inner.section-visible .members-heading     { opacity:1; transform:none; transition-delay: 0.05s; }
-.section-inner.section-visible .member-name         { opacity:1; transform:none; }
+@media (min-width: 769px) {
+  .section-inner.section-visible .vision-header       { opacity:1; transform:none; transition-delay: 0.1s; }
+  .section-inner.section-visible .vision-card         { opacity:1; transform:none; transition-delay: 0.2s; }
+  .section-inner.section-visible .vision-card:nth-child(2) { transition-delay: 0.32s; }
+  .section-inner.section-visible .vision-card:nth-child(3) { transition-delay: 0.44s; }
+  .section-inner.section-visible .about-hr            { opacity:1; transform:none; transition-delay: 0.05s; }
+  .section-inner.section-visible .about-video-wrap    { opacity:1; transform:none; transition-delay: 0.15s; }
+  .section-inner.section-visible .about-text          { opacity:1; transform:none; transition-delay: 0.3s; }
+  .section-inner.section-visible .projects-top-label  { opacity:1; transform:none; transition-delay: 0.1s; }
+  .section-inner.section-visible .project-pill        { opacity:1; transform:none; }
+  .section-inner.section-visible .members-heading     { opacity:1; transform:none; transition-delay: 0.05s; }
+  .section-inner.section-visible .member-name         { opacity:1; transform:none; }
 
-.section-inner.section-visible .project-pill:nth-child(1) { transition-delay: 0.1s; }
-.section-inner.section-visible .project-pill:nth-child(2) { transition-delay: 0.18s; }
-.section-inner.section-visible .project-pill:nth-child(3) { transition-delay: 0.26s; }
-.section-inner.section-visible .project-pill:nth-child(4) { transition-delay: 0.34s; }
-.section-inner.section-visible .project-pill:nth-child(5) { transition-delay: 0.42s; }
-.section-inner.section-visible .project-pill:nth-child(6) { transition-delay: 0.50s; }
-.section-inner.section-visible .project-pill:nth-child(7) { transition-delay: 0.58s; }
-.section-inner.section-visible .project-pill:nth-child(8) { transition-delay: 0.66s; }
+  .section-inner.section-visible .project-pill:nth-child(1) { transition-delay: 0.1s; }
+  .section-inner.section-visible .project-pill:nth-child(2) { transition-delay: 0.18s; }
+  .section-inner.section-visible .project-pill:nth-child(3) { transition-delay: 0.26s; }
+  .section-inner.section-visible .project-pill:nth-child(4) { transition-delay: 0.34s; }
+  .section-inner.section-visible .project-pill:nth-child(5) { transition-delay: 0.42s; }
+  .section-inner.section-visible .project-pill:nth-child(6) { transition-delay: 0.50s; }
+  .section-inner.section-visible .project-pill:nth-child(7) { transition-delay: 0.58s; }
+  .section-inner.section-visible .project-pill:nth-child(8) { transition-delay: 0.66s; }
+}
 
 #butterfly-cursor {
   position: fixed;
