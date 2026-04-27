@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Core Team — KRL</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=10">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
@@ -260,34 +260,13 @@
       background: #c9a84c;
     }
 
-    /* LinkedIn button */
-    .lead-social {
-      margin-top: 8px;
-    }
-
-    .lead-linkedin {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      color: #1a1a1a;
-      text-decoration: none;
-      border: 1.5px solid rgba(0,0,0,0.15);
-      padding: 9px 20px;
-      border-radius: 999px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 500;
-      transition: all 0.25s ease;
-    }
-
-    .lead-linkedin:hover {
-      background: #0077b5;
-      border-color: #0077b5;
-      color: #fff;
-    }
-
     /* ===== Mobile ===== */
     @media (max-width: 768px) {
+      .lead-entry,
+      .lead-entry--reverse {
+        opacity: 1 !important;
+        transform: none !important;
+      }
       .leads-magazine {
         padding: 0 24px 80px;
       }
@@ -356,7 +335,7 @@
     <div class="lead-entry" id="lead-rahitya" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Rahitya.jpeg" alt="Rahitya"
+          <img loading="lazy" src="assets/images/Rahitya.jpeg" alt="Rahitya"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">R</div>
         </div>
@@ -375,21 +354,13 @@
             <li><a href="projects.html#project-16" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(201,168,76,0.5);text-underline-offset:3px;">Road Segmentation with Depth Cameras</a></li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/devi-sai-rahitya-ulapalli-2aa6bb325/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry lead-entry--reverse" id="lead-vamsi" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Vamsi.jpeg" alt="Vamsi"
+          <img loading="lazy" src="assets/images/Vamsi.jpeg" alt="Vamsi"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">V</div>
         </div>
@@ -408,21 +379,13 @@
             <li>3D Mapping</li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/vamsi-krishna-vechalapu-a44792310/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry" id="lead-vijay" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Vijay.jpeg" alt="Vijay"
+          <img loading="lazy" src="assets/images/Vijay.jpeg" alt="Vijay"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">V</div>
         </div>
@@ -440,21 +403,13 @@
             <li><a href="projects.html#project-14" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(201,168,76,0.5);text-underline-offset:3px;">Autonomous Mapping using ROS 2</a></li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/vijay-kumar-gorli/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry lead-entry--reverse" id="lead-raju" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Raju.jpeg" alt="Raju"
+          <img loading="lazy" src="assets/images/Raju.jpeg" alt="Raju"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">R</div>
         </div>
@@ -472,21 +427,13 @@
             <li>Drone Navigation in Simulation</li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/pothana-raja-b8872928b/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry" id="lead-hari" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Hari.jpeg" alt="Hari"
+          <img loading="lazy" src="assets/images/Hari.jpeg" alt="Hari"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">H</div>
         </div>
@@ -503,21 +450,13 @@
             <li>Pick-and-Place Operation Simulation in ABB RobotStudio</li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/lakkoju-hari-prakash-99955b2a7/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry lead-entry--reverse" id="lead-anil-kumar" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Anil.jpeg" alt="Anil Kumar"
+          <img loading="lazy" src="assets/images/Anil.jpeg" alt="Anil Kumar"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">AK</div>
         </div>
@@ -535,21 +474,13 @@
             <li><a href="projects.html#project-11" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(201,168,76,0.5);text-underline-offset:3px;">VR Teleoperation with GO2 Robot</a></li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/anil3423/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry" id="lead-hema" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Hema.jpeg" alt="Hema"
+          <img loading="lazy" src="assets/images/Hema.jpeg" alt="Hema"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">H</div>
         </div>
@@ -567,21 +498,13 @@
             <li><a href="projects.html#project-16" style="color:inherit;text-decoration:underline;text-decoration-color:rgba(201,168,76,0.5);text-underline-offset:3px;">Road Segmentation with Depth Cameras</a></li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/hemanthalakshmigundala/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry lead-entry--reverse" id="lead-satyasree" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Satya.jpeg" alt="Satyasree"
+          <img loading="lazy" src="assets/images/Satya.jpeg" alt="Satyasree"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">SS</div>
         </div>
@@ -599,20 +522,12 @@
             <li>Goal-Based Navigation in ROS2 + Gazebo Simulation</li>
           </ul>
         </div>
-        <div class="lead-social">
-          <a href="https://www.linkedin.com/in/satya-sree-kommireddi-984076293/" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
     <div class="lead-entry" id="lead-prudhvi" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Prudhvi Raj Sanaboina.jpg" alt="Prudhvi Raj Sanaboina"
+          <img loading="lazy" src="assets/images/Prudhvi Raj Sanaboina.jpg" alt="Prudhvi Raj Sanaboina"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">PS</div>
         </div>
@@ -626,21 +541,13 @@
         <div class="lead-bio">
           ML Engineer @Rosversity | ROS Engineer | AI Engineer | Passionate Learner | Open to Robotics, Neuro Science & SDE Roles
         </div>
-        <div class="lead-social">
-          <a href="https://linkedin.com/in/prudhvi-raj-sanaboina-454152340" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
     <div class="lead-entry lead-entry--reverse" id="lead-ganesh" data-aos>
       <div class="lead-photo-side">
         <div class="lead-photo-wrap">
-          <img src="assets/images/Gudimetla Ganesh.jpg" alt="Gudimetla Ganesh"
+          <img loading="lazy" src="assets/images/Gudimetla Ganesh.jpg" alt="Gudimetla Ganesh"
                onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
           <div class="lead-initials-fallback" style="display:none">GG</div>
         </div>
@@ -654,20 +561,12 @@
         <div class="lead-bio">
           ML Engineer @Rosversity | ROS Engineer | AI Engineer | Passionate Learner | Open to Robotics, Neuro Science & SDE Roles
         </div>
-        <div class="lead-social">
-          <a href="https://linkedin.com/in/gudimetla-ganesh-a249062b4" target="_blank" class="lead-linkedin">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
+</div>
     </div>
 
   </div>
 
-  <script src="script.js" defer></script>
+  <script src="script.js?v=10" defer></script>
 
   <script>
     (function () {
