@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Y. Sai — Lead of KRL</title>
-  <link rel="stylesheet" href="style.css?v=4">
+  <link rel="stylesheet" href="style.css?v=10">
   <style>
     :root {
       --accent: #c9a84c;
@@ -249,50 +249,44 @@
     }
 
     @media (max-width: 768px) {
+      body.lead-profile { cursor: auto !important; }
       .profile-hero {
         grid-template-columns: 1fr;
-        padding: 120px 24px 60px;
+        padding: 100px 20px 48px;
         text-align: center;
         min-height: auto;
-        gap: 40px;
+        gap: 32px;
       }
-
       .profile-info {
         display: flex;
         flex-direction: column;
         align-items: center;
         order: 2;
       }
-
       .profile-image-wrap {
         order: 1;
-        max-width: 320px;
+        max-width: 260px;
         margin: 0 auto;
+        animation: none !important;
+        opacity: 1 !important;
         transform: none !important;
-        animation: fadeInUp 1s var(--ease-expo) forwards 0.5s;
       }
-
-      .profile-name {
-        font-size: clamp(48px, 12vw, 72px);
+      .profile-label, .profile-name, .profile-title {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
       }
-
-      .profile-title {
-        font-size: 1.1rem;
-        margin: 0 auto;
-      }
-
-      .linkedin-link {
-        margin: 30px auto 0;
-      }
-
-      .project-info {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
-      .honor-card {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
+      .profile-name { font-size: clamp(44px, 12vw, 72px); }
+      .profile-title { font-size: 1rem; margin: 0 auto; }
+      .linkedin-link { margin: 24px auto 0; }
+      .profile-scroll-hint { display: none; }
+      .section-skills { padding: 48px 20px; }
+      .section-honors { padding: 48px 20px; }
+      .section-projects { padding: 48px 20px; }
+      .project-info { grid-template-columns: 1fr; gap: 16px; }
+      .project-info h3 { font-size: clamp(24px, 7vw, 36px); }
+      .honor-card { grid-template-columns: 1fr; gap: 8px; padding: 24px 0; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 32px; }
     }
 
     /* LinkedIn Link */
@@ -329,7 +323,10 @@
       <span class="navbar-dot"></span>
       Robotics Lab
     </a>
-    <div class="navbar-right">
+    <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="navbar-right" id="navMenu">
       <a href="index.html" class="navbar-link">Home</a>
       <a href="members.html" class="navbar-link">Members</a>
       <a href="projects.html" class="navbar-link">Projects</a>
@@ -404,7 +401,7 @@
     <div class="project-entry">
       <div class="project-video">
         <video autoplay muted loop playsinline>
-          <source src="assets/go2w multi floor autonomous way point navigation.mp4" type="video/mp4">
+          <source src="assets/go2w%20multi%20floor%20autonomous%20way%20point%20navigation.mp4" type="video/mp4">
         </video>
       </div>
       <div class="project-info">
@@ -438,6 +435,6 @@
     &copy; 2024 KIET Robotics Lab. Lead Portfolio: Y. Sai
   </footer>
 
-  <script src="script.js?v=4"></script>
+  <script src="script.js?v=10"></script>
 </body>
 </html>
