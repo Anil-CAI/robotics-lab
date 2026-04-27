@@ -1,12 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KRL — KIET Robotics Lab</title>
-  <link rel="stylesheet" href="style.css?v=6">
-  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+  <link rel="stylesheet" href="style.css?v=10">
+
+  <!-- Spline only on desktop — it steals touch events on mobile -->
+  <script>
+    if (!window.matchMedia('(pointer: coarse)').matches && window.innerWidth >= 769) {
+      document.write('<sc'+'ript type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"><\/sc'+'ript>');
+    }
+  </script>
+
+  <style>
+  /* ============================================================
+     INDEX — MOBILE OVERRIDES  (max-width: 768px)
+     Desktop CSS lives entirely in style.css — untouched here.
+     On mobile this block is the ONLY layout authority.
+     ============================================================ */
+  @media (max-width: 768px) {
+
+    /* Kill every animation / transition / transform globally */
+    *, *::before, *::after {
+      animation:  none !important;
+      transition: none !important;
+      transform:  none !important;
+    }
+
+    html, body {
+      scroll-snap-type:    none !important;
+      overscroll-behavior: auto !important;
+      height:    auto !important;
+      overflow-x: hidden  !important;
+      overflow-y: auto    !important;
+      cursor: auto !important;
+    }
+
+    /* ---------- Hide desktop-only decorative elements ---------- */
+    .cursor-dot,
+    #butterfly-cursor,
+    .hero-bg-text,
+    .hero-scroll-hint,
+    .projects-waves,
+    .projects-cursive,
+    #scrollProgress,
+    .page-loader,
+    #krl-transition-overlay,
+    /* Spline is conditionally not loaded, but hide wrapper too */
+    .hero-spline-container { display: none !important; }
+
+    /* ---------- All section-inners: plain block, auto height ---------- */
+    .section-inner {
+      display:         block     !important;
+      position:        relative  !important;
+      min-height:      0         !important;
+      height:          auto      !important;
+      opacity:         1         !important;
+      overflow:        visible   !important;
+      scroll-snap-align: none   !important;
+    }
+
+    /* ---------- HERO: full-screen gradient, no 3D ---------- */
+    #heroInner {
+      height:          100svh    !important;
+      min-height:      0         !important;
+      display:         flex      !important;
+      flex-direction:  column    !important;
+      align-items:     center    !important;
+      justify-content: center    !important;
+      text-align:      center    !important;
+      padding:         0 24px    !important;
+      overflow:        hidden    !important;
+      background: radial-gradient(ellipse at 60% 40%, #e8ddc8 0%, #f0ede6 60%) !important;
+    }
+    .hero-mobile-content {
+      z-index: 2;
+      pointer-events: auto;
+    }
+    .hero-mobile-content h1 {
+      font-family: var(--serif);
+      font-size: clamp(52px, 16vw, 88px);
+      font-weight: 800;
+      line-height: 0.95;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .hero-mobile-content p {
+      font-size: 1rem;
+      color: var(--grey);
+      max-width: 300px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .hero-mobile-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .hero-mobile-btns a {
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .hero-mobile-btns .btn-primary {
+      background: var(--text);
+      color: var(--bg);
+    }
+    .hero-mobile-btns .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid rgba(26,26,26,0.25);
+    }
+
+    /* ---------- VISION ---------- */
+    #visionInner {
+      padding: 56px 20px 48px !important;
+    }
+    #visionInner .vision-header,
+    #visionInner .vision-cards,
+    #visionInner .vision-card {
+      opacity: 1 !important;
+    }
+    .vision-header { margin-bottom: 28px !important; }
+    .vision-cards {
+      display:        flex        !important;
+      flex-direction: column      !important;
+      gap:            14px        !important;
+    }
+    .vision-card {
+      padding:      24px 20px !important;
+      will-change:  auto      !important;
+    }
+    .vision-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.05) !important; }
+
+    /* ---------- ABOUT ---------- */
+    #aboutInner {
+      padding: 48px 20px !important;
+    }
+    .about-hr {
+      width:   100% !important;
+      opacity: 1    !important;
+    }
+    .about-grid {
+      display:        flex      !important;
+      flex-direction: column    !important;
+      gap:            28px      !important;
+    }
+    #aboutInner .about-video-wrap,
+    #aboutInner .about-text {
+      opacity: 1 !important;
+    }
+    .about-video-wrap {
+      width:         100%  !important;
+      border-radius: 12px  !important;
+    }
+    .about-stats {
+      gap:       24px  !important;
+      flex-wrap: wrap  !important;
+    }
+
+    /* ---------- PROJECTS ---------- */
+    #projectsInner {
+      display:    block    !important;
+      padding:    48px 20px !important;
+      min-height: 0        !important;
+      height:     auto     !important;
+      overflow:   visible  !important;
+    }
+    .projects-top-label {
+      position:      relative  !important;
+      inset:         auto      !important;
+      opacity:       1         !important;
+      font-size:     0.62rem   !important;
+      letter-spacing: 2px      !important;
+      margin-bottom: 20px      !important;
+      padding:       0         !important;
+    }
+    .projects-scatter {
+      position:       relative !important;
+      inset:          auto     !important;
+      display:        flex     !important;
+      flex-direction: column   !important;
+      gap:            10px     !important;
+      opacity:        1        !important;
+      padding:        0        !important;
+      min-height:     0        !important;
+      height:         auto     !important;
+    }
+    .project-pill {
+      position:   relative !important;
+      inset:      auto     !important;
+      display:    block    !important;
+      opacity:    1        !important;
+      visibility: visible  !important;
+      width:      100%     !important;
+      max-width:  none     !important;
+      white-space: normal  !important;
+      padding:    14px 18px !important;
+      font-size:  0.9rem   !important;
+      cursor:     pointer  !important;
+    }
+    .project-pill:nth-child(n) {
+      top: auto !important; left: auto !important;
+      bottom: auto !important; right: auto !important;
+    }
+
+    /* ---------- MEMBERS ---------- */
+    #membersInner {
+      display:    block    !important;
+      padding:    48px 20px 56px !important;
+      min-height: 0        !important;
+      height:     auto     !important;
+      overflow:   visible  !important;
+    }
+    .members-heading {
+      position:      relative !important;
+      inset:         auto     !important;
+      opacity:       1        !important;
+      margin-bottom: 28px     !important;
+      text-align:    left     !important;
+    }
+    .members-heading h2 {
+      font-size:   clamp(44px, 12vw, 72px) !important;
+      line-height: 1 !important;
+    }
+    .members-scatter {
+      position:    relative  !important;
+      inset:       auto      !important;
+      display:     flex      !important;
+      flex-wrap:   wrap      !important;
+      gap:         10px 16px !important;
+      align-items: baseline  !important;
+      min-height:  0         !important;
+      height:      auto      !important;
+    }
+    .member-name {
+      position: relative   !important;
+      inset:    auto       !important;
+      display:  inline-block !important;
+      opacity:  1          !important;
+    }
+    .member-senior {
+      font-size: clamp(17px, 4.5vw, 22px) !important;
+    }
+    .member-junior {
+      font-size: clamp(12px, 3vw, 14px) !important;
+    }
+
+    /* ---------- Navbar mobile ---------- */
+    .nav-section-indicator { display: none !important; }
+
+  }
+  </style>
 </head>
 
 <body>
@@ -32,7 +281,6 @@
       <span></span><span></span><span></span>
     </button>
     <div class="navbar-right" id="navMenu">
-
       <div class="nav-section-indicator" id="navSectionIndicator">
         <span class="nav-section-dot"></span>
         <span id="navSectionLabel">KRL</span>
@@ -42,7 +290,14 @@
     </div>
   </nav>
 
+  <!-- ═══════════════════════════════════════════════
+       HERO
+       Desktop: Spline 3D + butterfly cursor
+       Mobile:  gradient + static text CTA
+  ═══════════════════════════════════════════════ -->
   <section class="section-inner" id="heroInner">
+
+    <!-- Desktop-only elements -->
     <div class="hero-bg-text" id="heroBgText">ROBOTICS</div>
     <div class="hero-spline-container" id="heroSpline">
       <spline-viewer url="https://prod.spline.design/9cSCLEkp2taGwiE0/scene.splinecode"></spline-viewer>
@@ -53,30 +308,35 @@
     </div>
     <div id="butterfly-cursor">
       <svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg" id="butterfly-svg">
-
         <path id="wing-left" d="M30,20 C20,5 2,2 2,14 C2,24 18,28 30,20Z" fill="#c9a84c" fill-opacity="0.85" />
-
         <path id="wing-right" d="M30,20 C40,5 58,2 58,14 C58,24 42,28 30,20Z" fill="#c9a84c" fill-opacity="0.85" />
-
         <path id="wing-lower-left" d="M30,20 C16,22 4,34 10,38 C18,42 28,32 30,20Z" fill="#b8942e" fill-opacity="0.7" />
-
-        <path id="wing-lower-right" d="M30,20 C44,22 56,34 50,38 C42,42 32,32 30,20Z" fill="#b8942e"
-          fill-opacity="0.7" />
-
+        <path id="wing-lower-right" d="M30,20 C44,22 56,34 50,38 C42,42 32,32 30,20Z" fill="#b8942e" fill-opacity="0.7" />
         <ellipse cx="30" cy="22" rx="2" ry="10" fill="#3a2a0a" />
-
         <circle cx="30" cy="11" r="2.5" fill="#3a2a0a" />
-
         <line x1="30" y1="10" x2="22" y2="3" stroke="#3a2a0a" stroke-width="1" />
         <line x1="30" y1="10" x2="38" y2="3" stroke="#3a2a0a" stroke-width="1" />
         <circle cx="22" cy="3" r="1.2" fill="#c9a84c" />
         <circle cx="38" cy="3" r="1.2" fill="#c9a84c" />
       </svg>
-
       <div id="butterfly-trail"></div>
     </div>
+
+    <!-- Mobile-only hero content (hidden on desktop via CSS) -->
+    <div class="hero-mobile-content">
+      <h1>KRL</h1>
+      <p>Building real robots with real impact since 2022.</p>
+      <div class="hero-mobile-btns">
+        <a href="projects.html" class="btn-primary">Our Projects</a>
+        <a href="join.html" class="btn-secondary">Connect</a>
+      </div>
+    </div>
+
   </section>
 
+  <!-- ═══════════════════════════════════════════════
+       VISION
+  ═══════════════════════════════════════════════ -->
   <section class="section-inner" id="visionInner">
     <div class="vision-header">
       <div class="vision-label">WHAT'S NEXT</div>
@@ -99,8 +359,10 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════
+       ABOUT
+  ═══════════════════════════════════════════════ -->
   <section class="section-inner" id="aboutInner">
-
     <div class="about-hr"></div>
     <div class="about-grid">
       <div class="about-video-wrap" id="aboutVideo">
@@ -129,28 +391,22 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════
+       PROJECTS
+  ═══════════════════════════════════════════════ -->
   <section class="section-inner" id="projectsInner">
-
     <div class="projects-waves">
       <svg class="wave-1" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="#e0d5c5" fill-opacity="0.5"
-          d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,224C672,213,768,171,864,154.7C960,139,1056,149,1152,170.7C1248,192,1344,224,1392,240L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
-        </path>
+        <path fill="#e0d5c5" fill-opacity="0.5" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,224C672,213,768,171,864,154.7C960,139,1056,149,1152,170.7C1248,192,1344,224,1392,240L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
       </svg>
       <svg class="wave-2" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="#c9b8a0" fill-opacity="0.35"
-          d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,128C672,107,768,117,864,144C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z">
-        </path>
+        <path fill="#c9b8a0" fill-opacity="0.35" d="M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,128C672,107,768,117,864,144C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
       </svg>
       <svg class="wave-3" viewBox="0 0 1440 320" preserveAspectRatio="none">
-        <path fill="#b8a090" fill-opacity="0.25"
-          d="M0,224L48,208C96,192,192,160,288,165.3C384,171,480,213,576,218.7C672,224,768,192,864,176C960,160,1056,160,1152,176C1248,192,1344,224,1392,240L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z">
-        </path>
+        <path fill="#b8a090" fill-opacity="0.25" d="M0,224L48,208C96,192,192,160,288,165.3C384,171,480,213,576,218.7C672,224,768,192,864,176C960,160,1056,160,1152,176C1248,192,1344,224,1392,240L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
       </svg>
     </div>
-
     <div class="projects-top-label">HEY — THESE ARE THE PROJECTS DEVELOPED BY OUR TEAM</div>
-
     <div class="projects-scatter" id="projectsScatter">
       <div class="project-pill" onclick="location.href='projects.html#project-01'">How does SLAM work in real-time?</div>
       <div class="project-pill" onclick="location.href='projects.html#project-03'">Can robots learn by themselves?</div>
@@ -161,65 +417,71 @@
       <div class="project-pill" onclick="location.href='projects.html#project-05'">How does 2D become 3D navigation?</div>
       <div class="project-pill" onclick="location.href='projects.html#project-07'">Can AI run fully offline in your language?</div>
       <div class="project-pill" onclick="location.href='projects.html#project-14'">Autonomous Mapping using ROS 2</div>
-      <div class="project-pill" onclick="location.href='projects.html#project-15'">Vision-Only 3D Mapping with RTAB-Map | ROS 2</div>
+      <div class="project-pill" onclick="location.href='projects.html#project-15'">Vision-Only 3D Mapping with RTAB-Map</div>
       <div class="project-pill" onclick="location.href='projects.html#project-16'">Road Segmentation with Depth Cameras</div>
       <div class="project-pill" onclick="location.href='projects.html#project-17'">Voice-Controlled Robot Dog using ROS 2</div>
     </div>
-
     <div class="projects-cursive">go with the flow</div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════
+       MEMBERS
+  ═══════════════════════════════════════════════ -->
   <section class="section-inner" id="membersInner">
-
     <div class="members-heading">
       <h2>KRL<br>Members</h2>
     </div>
-
     <div class="members-scatter" id="membersScatter">
-
-      <a href="leads.html#lead-anil-kumar" class="member-name member-senior">Anil Kumar</a>
-      <a href="leads.html#lead-vamsi" class="member-name member-senior">Vamsi</a>
-      <a href="leads.html#lead-satyasree" class="member-name member-senior">Satya Sree</a>
-      <a href="leads.html#lead-vijay" class="member-name member-senior">Vijay</a>
-      <a href="leads.html#lead-raju" class="member-name member-senior">Raju</a>
-      <a href="leads.html#lead-hari" class="member-name member-senior">Hari</a>
-      <a href="leads.html#lead-rahitya" class="member-name member-senior">Rahitya</a>
-      <a href="leads.html#lead-hema" class="member-name member-senior">Hema</a>
-
-      <a href="members.html#member-darla-praveen" class="member-name member-junior">Darla Praveen</a>
-      <a href="members.html#member-puli-hemanth" class="member-name member-junior">Puli Hemanth</a>
-      <a href="members.html#member-d-divya" class="member-name member-junior">D. Divya</a>
-      <a href="members.html#member-koyilada-prem" class="member-name member-junior">Koyilada Prem</a>
-      <a href="members.html#member-a-anjali" class="member-name member-junior">A. Anjali</a>
-      <a href="members.html#member-t-ramu" class="member-name member-junior">T. Ramu</a>
-      <a href="members.html#member-g-ganga-lakshmi" class="member-name member-junior">G. Ganga Lakshmi</a>
-      <a href="members.html#member-kusuma-latha" class="member-name member-junior">Kusuma Latha</a>
-      <a href="members.html#member-jyothikaharshini" class="member-name member-junior">Jyothikaharshini</a>
-      <a href="members.html#member-g-s-n-sirisha" class="member-name member-junior">G. S. N. Sirisha</a>
-      <a href="members.html#member-b-sowmya-sri" class="member-name member-junior">B. Sowmya Sri</a>
-      <a href="members.html#member-m-uma-devi" class="member-name member-junior">M. Uma Devi</a>
-      <a href="members.html#member-jhansi-cheduluri" class="member-name member-junior">Jhansi Cheduluri</a>
-      <a href="members.html#member-p-lakshmi-priyanka" class="member-name member-junior">P. Lakshmi Priyanka</a>
+      <a href="leads.html#lead-anil-kumar"  class="member-name member-senior">Anil Kumar</a>
+      <a href="leads.html#lead-vamsi"       class="member-name member-senior">Vamsi</a>
+      <a href="leads.html#lead-satyasree"   class="member-name member-senior">Satya Sree</a>
+      <a href="leads.html#lead-vijay"       class="member-name member-senior">Vijay</a>
+      <a href="leads.html#lead-raju"        class="member-name member-senior">Raju</a>
+      <a href="leads.html#lead-hari"        class="member-name member-senior">Hari</a>
+      <a href="leads.html#lead-rahitya"     class="member-name member-senior">Rahitya</a>
+      <a href="leads.html#lead-hema"        class="member-name member-senior">Hema</a>
+      <a href="members.html#member-darla-praveen"       class="member-name member-junior">Darla Praveen</a>
+      <a href="members.html#member-puli-hemanth"        class="member-name member-junior">Puli Hemanth</a>
+      <a href="members.html#member-d-divya"             class="member-name member-junior">D. Divya</a>
+      <a href="members.html#member-koyilada-prem"       class="member-name member-junior">Koyilada Prem</a>
+      <a href="members.html#member-a-anjali"            class="member-name member-junior">A. Anjali</a>
+      <a href="members.html#member-t-ramu"              class="member-name member-junior">T. Ramu</a>
+      <a href="members.html#member-g-ganga-lakshmi"     class="member-name member-junior">G. Ganga Lakshmi</a>
+      <a href="members.html#member-kusuma-latha"        class="member-name member-junior">Kusuma Latha</a>
+      <a href="members.html#member-jyothikaharshini"    class="member-name member-junior">Jyothikaharshini</a>
+      <a href="members.html#member-g-s-n-sirisha"       class="member-name member-junior">G. S. N. Sirisha</a>
+      <a href="members.html#member-b-sowmya-sri"        class="member-name member-junior">B. Sowmya Sri</a>
+      <a href="members.html#member-m-uma-devi"          class="member-name member-junior">M. Uma Devi</a>
+      <a href="members.html#member-jhansi-cheduluri"    class="member-name member-junior">Jhansi Cheduluri</a>
+      <a href="members.html#member-p-lakshmi-priyanka"  class="member-name member-junior">P. Lakshmi Priyanka</a>
       <a href="members.html#member-chandra-bhanu-singh" class="member-name member-junior">Chandra Bhanu Singh</a>
-      <a href="members.html#member-m-anand-sagar" class="member-name member-junior">M. Anand Sagar</a>
-      <a href="members.html#member-l-sri-hasini" class="member-name member-junior">L. Sri Hasini</a>
+      <a href="members.html#member-m-anand-sagar"       class="member-name member-junior">M. Anand Sagar</a>
+      <a href="members.html#member-l-sri-hasini"        class="member-name member-junior">L. Sri Hasini</a>
       <a href="members.html#member-p-prudhvi-naga-raju" class="member-name member-junior">P. Prudhvi Naga Raju</a>
-      <a href="members.html#member-j-manikanta-suresh" class="member-name member-junior">J. Manikanta Suresh</a>
-      <a href="members.html#member-t-anushka" class="member-name member-junior">T. Anushka</a>
-      <a href="members.html#member-s-uma-shankar" class="member-name member-junior">S. Uma Shankar</a>
-      <a href="members.html#member-ch-srivalli" class="member-name member-junior">Ch. Srivalli</a>
-      <a href="members.html#member-a-satya-chandrika" class="member-name member-junior">A. Satya Chandrika</a>
-      <a href="members.html#member-p-madhuri" class="member-name member-junior">P. Madhuri</a>
-      <a href="members.html#member-m-supraja" class="member-name member-junior">M. Supraja</a>
+      <a href="members.html#member-j-manikanta-suresh"  class="member-name member-junior">J. Manikanta Suresh</a>
+      <a href="members.html#member-t-anushka"           class="member-name member-junior">T. Anushka</a>
+      <a href="members.html#member-s-uma-shankar"       class="member-name member-junior">S. Uma Shankar</a>
+      <a href="members.html#member-ch-srivalli"         class="member-name member-junior">Ch. Srivalli</a>
+      <a href="members.html#member-a-satya-chandrika"   class="member-name member-junior">A. Satya Chandrika</a>
+      <a href="members.html#member-p-madhuri"           class="member-name member-junior">P. Madhuri</a>
+      <a href="members.html#member-m-supraja"           class="member-name member-junior">M. Supraja</a>
     </div>
-
   </section>
 
   <footer class="footer">
     &copy; 2024 KIET Robotics Lab. Crafted with <span>&#9679;</span> ambition.
   </footer>
 
-  <script src="script.js?v=3"></script>
-</body>
+  <script src="script.js?v=10"></script>
 
+  <script>
+  /* On desktop: hide the mobile hero CTA */
+  (function () {
+    var el = document.querySelector('.hero-mobile-content');
+    if (!el) return;
+    var isMob = window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 769;
+    if (!isMob) el.style.display = 'none';
+  })();
+  </script>
+</body>
 </html>
